@@ -2,7 +2,7 @@
 
 module ModuleDefinition{
 
-    export class RemoveRowsImIn implements SteamGiftsModule {
+    export class HideEnteredGiveaways implements SteamGiftsModule {
 
         style = "";
 
@@ -22,7 +22,7 @@ module ModuleDefinition{
         }
 
         name(): string {
-            return "Remove Rows I'm In";
+            return "Remove entered GA";
         }
 
         shouldRun = (location: SGLocation) => true;
