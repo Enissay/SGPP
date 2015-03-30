@@ -22,11 +22,11 @@ module ModuleDefinition{
         }
 
         name(): string {
-            return "Remove entered GA";
+            return "Hide/Remove entered giveaways";
         }
 
-        shouldRun = (location: SGLocation) => true;
-        //shouldRun = (location: SGLocation) => location.pageKind == 'giveaway';
+        //shouldRun = (location: SGLocation) => true;
+        shouldRun = (location: SGLocation) => location.pageKind == 'giveaway';
     }
 
 }
