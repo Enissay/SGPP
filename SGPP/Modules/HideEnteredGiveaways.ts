@@ -10,11 +10,9 @@ module ModuleDefinition{
         }
 
         render(): void {
-            var gameRow = $("div.giveaway__row-outer-wrap");
+            console.log("WTF");
 
-            gameRow.each(function() {
-                
-                // Remove GA i'm already in
+            $("div.giveaway__row-outer-wrap").each(function() {
                 if ($(this).children("div.giveaway__row-inner-wrap").hasClass("is-faded")) {
                     $(this).remove(); // or hide()
                 }
@@ -28,5 +26,4 @@ module ModuleDefinition{
         //shouldRun = (location: SGLocation) => true;
         shouldRun = (location: SGLocation) => location.pageKind == 'giveaway';
     }
-
 }
