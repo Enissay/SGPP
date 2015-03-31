@@ -1272,25 +1272,24 @@ var ModuleDefinition;
 (function (ModuleDefinition) {
     var HideEnteredGiveaways = (function () {
         function HideEnteredGiveaways() {
+            var _this = this;
             this.style = "";
+            this.render = function () {
+                $("div.giveaway__row-outer-wrap").each(function (i, el) {
+                    _this.removeGiveaway(el);
+                });
+                SGPP.on("EndlessScrollGiveaways", "addItem", function (event, el) {
+                    _this.removeGiveaway(el);
+                });
+            };
             this.shouldRun = function (location) { return true; };
         }
         HideEnteredGiveaways.prototype.init = function () {
         };
-        HideEnteredGiveaways.prototype.render = function () {
-            var _this = this;
-            $("div.giveaway__row-outer-wrap").each(function (i, el) {
-                _this.removeGiveaway(el);
-            });
-            SGPP.on("EndlessScrollGiveaways", "addItem", function (el) {
-                SGPP.log("###xyx####[" + $(el).html + "]");
-                SGPP.log("###xxx####" + $(el).attr("class") + " # " + $(el).attr("tagName"));
-                SGPP.log("###yyy####" + $(el).prop("class") + " # " + $(el).prop("tagName"));
-            });
-        };
         HideEnteredGiveaways.prototype.removeGiveaway = function (el) {
             if ($(el).children("div.giveaway__row-inner-wrap").hasClass("is-faded")) {
                 $(el).remove();
+                console.log("===> " + $(el).find("h2.giveaway__heading").text().trim() + " REMOVED !");
             }
         };
         HideEnteredGiveaways.prototype.name = function () {
