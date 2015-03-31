@@ -1270,6 +1270,38 @@ var ModuleDefinition;
 })(ModuleDefinition || (ModuleDefinition = {}));
 var ModuleDefinition;
 (function (ModuleDefinition) {
+    var HideEnteredGiveaways = (function () {
+        function HideEnteredGiveaways() {
+            this.style = "";
+            this.shouldRun = function (location) { return true; };
+        }
+        HideEnteredGiveaways.prototype.init = function () {
+        };
+        HideEnteredGiveaways.prototype.render = function () {
+            var _this = this;
+            $("div.giveaway__row-outer-wrap").each(function (i, el) {
+                _this.removeGiveaway(el);
+            });
+            SGPP.on("EndlessScrollGiveaways", "addItem", function (el) {
+                SGPP.log("###xyx####[" + $(el).html + "]");
+                SGPP.log("###xxx####" + $(el).attr("class") + " # " + $(el).attr("tagName"));
+                SGPP.log("###yyy####" + $(el).prop("class") + " # " + $(el).prop("tagName"));
+            });
+        };
+        HideEnteredGiveaways.prototype.removeGiveaway = function (el) {
+            if ($(el).children("div.giveaway__row-inner-wrap").hasClass("is-faded")) {
+                $(el).remove();
+            }
+        };
+        HideEnteredGiveaways.prototype.name = function () {
+            return "Hide/Remove entered giveaways";
+        };
+        return HideEnteredGiveaways;
+    })();
+    ModuleDefinition.HideEnteredGiveaways = HideEnteredGiveaways;
+})(ModuleDefinition || (ModuleDefinition = {}));
+var ModuleDefinition;
+(function (ModuleDefinition) {
     var EndlessScroll = (function () {
         function EndlessScroll() {
             this._maxPage = 31337;
@@ -1823,9 +1855,10 @@ var ModuleDefinition;
     ModuleDefinition.EndlessScrollLists = EndlessScrollLists;
 })(ModuleDefinition || (ModuleDefinition = {}));
 var SGPP = new ModuleDefinition.Core();
-var modulesNames = new Array("CommentAndEnter", "EntryCommenters", "FixedNavbar", "FixedFooter", "GridView", "ScrollingSidebar", "UserHoverInfo", "UserTags", "MarkComments", "MessagesFilterTest", "PopupGiveaway", "EndlessScrollDiscussion", "EndlessScrollDiscussionReplies", "EndlessScrollGiveaways", "EndlessScrollGiveawayComments", "EndlessScrollLists");
+var modulesNames = new Array("CommentAndEnter", "EntryCommenters", "FixedNavbar", "FixedFooter", "GridView", "ScrollingSidebar", "UserHoverInfo", "UserTags", "MarkComments", "MessagesFilterTest", "PopupGiveaway", "HideEnteredGiveaways", "EndlessScrollDiscussion", "EndlessScrollDiscussionReplies", "EndlessScrollGiveaways", "EndlessScrollGiveawayComments", "EndlessScrollLists");
 var defaultModules = {
     "FixedNavbar": { "enabled": true },
+    "HideEnteredGiveaways": { "enabled": true },
     "ScrollingSidebar": { "enabled": true }
 };
 var currentVersion = "0.3.0";
