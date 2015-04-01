@@ -1270,8 +1270,8 @@ var ModuleDefinition;
 })(ModuleDefinition || (ModuleDefinition = {}));
 var ModuleDefinition;
 (function (ModuleDefinition) {
-    var HideEnteredGiveaways = (function () {
-        function HideEnteredGiveaways() {
+    var FilterEnteredGiveaways = (function () {
+        function FilterEnteredGiveaways() {
             var _this = this;
             this.style = "";
             this.render = function () {
@@ -1282,22 +1282,105 @@ var ModuleDefinition;
                     _this.removeGiveaway(el);
                 });
             };
-            this.shouldRun = function (location) { return true; };
+            this.removeGiveaway = function (el) {
+                if ($(el).children("div.giveaway__row-inner-wrap").hasClass("is-faded")) {
+                    $(el).hide();
+                }
+            };
+            this.shouldRun = function (location) { return location.pageKind == 'giveaways'; };
         }
-        HideEnteredGiveaways.prototype.init = function () {
+        FilterEnteredGiveaways.prototype.init = function () {
         };
-        HideEnteredGiveaways.prototype.removeGiveaway = function (el) {
-            if ($(el).children("div.giveaway__row-inner-wrap").hasClass("is-faded")) {
-                $(el).remove();
-                console.log("===> " + $(el).find("h2.giveaway__heading").text().trim() + " REMOVED !");
-            }
-        };
-        HideEnteredGiveaways.prototype.name = function () {
+        FilterEnteredGiveaways.prototype.name = function () {
             return "Hide/Remove entered giveaways";
         };
-        return HideEnteredGiveaways;
+        return FilterEnteredGiveaways;
     })();
-    ModuleDefinition.HideEnteredGiveaways = HideEnteredGiveaways;
+    ModuleDefinition.FilterEnteredGiveaways = FilterEnteredGiveaways;
+})(ModuleDefinition || (ModuleDefinition = {}));
+var ModuleDefinition;
+(function (ModuleDefinition) {
+    var FilterByEntriesCount = (function () {
+        function FilterByEntriesCount() {
+            var _this = this;
+            this.lowAcceptedlimit_EntriesPerCopy = 100;
+            this.highAcceptedLimit_EntriesPerCopy = 250;
+            this.lowAcceptedlimit_Color = "#66FF66";
+            this.highAcceptedLimit_Color = "#66FFCC";
+            this.style = "";
+            this.render = function () {
+                console.log("FilterByEntriesCount - render");
+                $("div.giveaway__row-outer-wrap:visible").each(function (i, el) {
+                    _this.applyColors(el);
+                });
+                SGPP.on("EndlessScrollGiveaways", "addItem", function (event, el) {
+                    _this.applyColors(el);
+                });
+            };
+            this.applyColors = function (el) {
+                if (!$(el).children("div.giveaway__row-inner-wrap").hasClass("is-faded")) {
+                    var gameNameNode = $(el).find("h2.giveaway__heading > a.giveaway__heading__name");
+                    var nbrEntries = parseInt($(el).find("div.giveaway__links > a[href$=entries] > span").text().replace(/\D+/g, ""));
+                    var nbrCopies = 1;
+                    var remainingTimeNode = $(el).find("div.giveaway__columns > div:nth-child(1) > span");
+                    var copiesTemp = $(el).find("h2.giveaway__heading > span.giveaway__heading__thin:contains('Copies')").text();
+                    if (copiesTemp.length > 0) {
+                        nbrCopies = parseInt((/\d+/.exec(copiesTemp))[0]);
+                    }
+                    var entryRatio = nbrEntries / nbrCopies;
+                    if (entryRatio <= _this.lowAcceptedlimit_EntriesPerCopy) {
+                        $(el).css("background", _this.lowAcceptedlimit_Color);
+                    }
+                    else if (entryRatio <= _this.highAcceptedLimit_EntriesPerCopy && entryRatio > _this.lowAcceptedlimit_EntriesPerCopy) {
+                        $(el).css("background", _this.highAcceptedLimit_Color);
+                    }
+                    if (!$(el).find(".entry_per_copy_count").length && nbrCopies > 1) {
+                        var entryStats = $("<span></span>").addClass("giveaway__heading__thin").addClass("entry_per_copy_count").text("(" + Math.round(entryRatio) + " entry per copy)");
+                        gameNameNode.parent().append(entryStats);
+                    }
+                }
+            };
+            this.shouldRun = function (location) { return location.pageKind == 'giveaways'; };
+        }
+        FilterByEntriesCount.prototype.init = function () {
+        };
+        FilterByEntriesCount.prototype.name = function () {
+            return "Hide/Remove giveaways by entries count";
+        };
+        return FilterByEntriesCount;
+    })();
+    ModuleDefinition.FilterByEntriesCount = FilterByEntriesCount;
+})(ModuleDefinition || (ModuleDefinition = {}));
+var ModuleDefinition;
+(function (ModuleDefinition) {
+    var HighlightSoonlyExpiringGiveaways = (function () {
+        function HighlightSoonlyExpiringGiveaways() {
+            var _this = this;
+            this.timeLimit = 2;
+            this.style = "";
+            this.render = function () {
+                $("div.giveaway__row-outer-wrap").each(function (i, el) {
+                    _this.highlight(el);
+                });
+                SGPP.on("EndlessScrollGiveaways", "addItem", function (event, el) {
+                    _this.highlight(el);
+                });
+            };
+            this.highlight = function (el) {
+                var remainingTimeNode = $(el).find("div.giveaway__columns > div:nth-child(1) > span");
+                if (remainingTimeNode.text().search(new RegExp("^[1-" + _this.timeLimit + "] hour|minute|second")) != -1)
+                    remainingTimeNode.parents().eq(0).css("background", "#FFFF66");
+            };
+            this.shouldRun = function (location) { return location.pageKind == 'giveaways'; };
+        }
+        HighlightSoonlyExpiringGiveaways.prototype.init = function () {
+        };
+        HighlightSoonlyExpiringGiveaways.prototype.name = function () {
+            return "Highlight giveaways expiring soon";
+        };
+        return HighlightSoonlyExpiringGiveaways;
+    })();
+    ModuleDefinition.HighlightSoonlyExpiringGiveaways = HighlightSoonlyExpiringGiveaways;
 })(ModuleDefinition || (ModuleDefinition = {}));
 var ModuleDefinition;
 (function (ModuleDefinition) {
@@ -1854,10 +1937,12 @@ var ModuleDefinition;
     ModuleDefinition.EndlessScrollLists = EndlessScrollLists;
 })(ModuleDefinition || (ModuleDefinition = {}));
 var SGPP = new ModuleDefinition.Core();
-var modulesNames = new Array("CommentAndEnter", "EntryCommenters", "FixedNavbar", "FixedFooter", "GridView", "ScrollingSidebar", "UserHoverInfo", "UserTags", "MarkComments", "MessagesFilterTest", "PopupGiveaway", "HideEnteredGiveaways", "EndlessScrollDiscussion", "EndlessScrollDiscussionReplies", "EndlessScrollGiveaways", "EndlessScrollGiveawayComments", "EndlessScrollLists");
+var modulesNames = new Array("CommentAndEnter", "EntryCommenters", "FixedNavbar", "FixedFooter", "GridView", "ScrollingSidebar", "UserHoverInfo", "UserTags", "MarkComments", "MessagesFilterTest", "PopupGiveaway", "FilterEnteredGiveaways", "FilterByEntriesCount", "HighlightSoonlyExpiringGiveaways", "EndlessScrollDiscussion", "EndlessScrollDiscussionReplies", "EndlessScrollGiveaways", "EndlessScrollGiveawayComments", "EndlessScrollLists");
 var defaultModules = {
     "FixedNavbar": { "enabled": true },
-    "HideEnteredGiveaways": { "enabled": true },
+    "FilterByEntriesCount": { "enabled": true },
+    "HighlightSoonlyExpiringGiveaways": { "enabled": true },
+    "EndlessScrollGiveaways": { "enabled": true },
     "ScrollingSidebar": { "enabled": true }
 };
 var currentVersion = "0.3.0";

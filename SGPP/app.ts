@@ -19,7 +19,9 @@
 /// <reference path="Modules/MarkComments.ts" />
 /// <reference path="Modules/MessagesFilterTest.ts" />
 /// <reference path="Modules/PopupGiveaway.ts" />
-/// <reference path="Modules/HideEnteredGiveaways.ts" />
+/// <reference path="Modules/FilterEnteredGiveaways.ts" />
+/// <reference path="Modules/FilterByEntriesCount.ts" />
+/// <reference path="Modules/HighlightSoonlyExpiringGiveaways.ts" />
 
 /// <reference path="Modules/EndlessScroll/EndlessScrollDiscussion.ts" />
 /// <reference path="Modules/EndlessScroll/EndlessScrollDiscussionReplies.ts" />
@@ -42,7 +44,9 @@ var modulesNames: Array<string> = new Array<string>(
     "MarkComments",
     "MessagesFilterTest",
     "PopupGiveaway",
-    "HideEnteredGiveaways",
+    "FilterEnteredGiveaways",
+    "FilterByEntriesCount",
+    "HighlightSoonlyExpiringGiveaways",
     "EndlessScrollDiscussion",
     "EndlessScrollDiscussionReplies",
     "EndlessScrollGiveaways",
@@ -52,7 +56,9 @@ var modulesNames: Array<string> = new Array<string>(
 
 var defaultModules = {
     "FixedNavbar": { "enabled": true },
-    "HideEnteredGiveaways": { "enabled": true },
+    "FilterByEntriesCount": { "enabled": true },
+    "HighlightSoonlyExpiringGiveaways": { "enabled": true },
+    "EndlessScrollGiveaways": { "enabled": true },
     "ScrollingSidebar": { "enabled": true }
     };
 

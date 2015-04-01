@@ -2,27 +2,26 @@
 
 module ModuleDefinition{
 
-	export class HideEnteredGiveaways implements SteamGiftsModule {
+	export class FilterEnteredGiveaways implements SteamGiftsModule {
 
 		style = "";
 
 		init(): void {
 		}
 
-		render = () => {
+        render = () => {
             $("div.giveaway__row-outer-wrap").each((i: number, el: Element) => {
                 this.removeGiveaway(el);
             });
 
             SGPP.on("EndlessScrollGiveaways", "addItem", (event: JQueryEventObject, el: Element) => {
                 this.removeGiveaway(el);
-			});
+            });
         }
 
-        removeGiveaway(el: Element): void {
+        removeGiveaway = (el: Element) => {
             if ($(el).children("div.giveaway__row-inner-wrap").hasClass("is-faded")) {
-                $(el).remove(); // or hide()
-                console.log( "===> " + $(el).find("h2.giveaway__heading").text().trim() + " REMOVED !" );
+                $(el).hide(); // or hide()
             }
         }
 
@@ -30,7 +29,6 @@ module ModuleDefinition{
 			return "Hide/Remove entered giveaways";
 		}
 
-		shouldRun = (location: SGLocation) => true;
-		//shouldRun = (location: SGLocation) => location.pageKind == 'giveaway';
+        shouldRun = (location: SGLocation) => location.pageKind == 'giveaways';
 	}
 }
